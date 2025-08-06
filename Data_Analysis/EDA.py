@@ -1,0 +1,28 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+aapl = pd.read_csv('../data/AAPL.csv', parse_dates=['Date'])
+msft = pd.read_csv('../data/MSFT.csv', parse_dates=['Date'])
+amzn = pd.read_csv('../data/AMZN.csv', parse_dates=['Date'])
+dates_aapl = set(aapl['Date'])
+dates_msft = set(msft['Date'])
+dates_amzn = set(amzn['Date'])
+all_dates = dates_aapl.union(dates_msft).union(dates_amzn)
+common_dates = dates_aapl & dates_msft & dates_amzn
+missing_dates = sorted(all_dates - common_dates)
+print("Missing Dates:")
+for d in missing_dates:
+    print(d.date()) 
+aapl = aapl.sort_values('Date')
+msft = msft.sort_values('Date')
+amzn = amzn.sort_values('Date')
+plt.figure(figsize=(12, 6))
+plt.plot(aapl['Date'], aapl['Close'], label='AAPL')
+plt.plot(msft['Date'], msft['Close'], label='MSFT')
+plt.plot(amzn['Date'], amzn['Close'], label='AMZN')
+plt.xlabel('Date')
+plt.ylabel('Closing Price')
+plt.title('Stock Closing Prices: AAPL, MSFT, AMZN')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
